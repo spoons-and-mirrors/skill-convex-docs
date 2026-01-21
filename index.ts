@@ -167,15 +167,15 @@ const compactifyItems = (items: string[], depth = 0): string[] => {
   return result
 }
 
-const DEFAULT_INTRO = `ALL PAGES ARE ACCESSIBLE AS MARKDOWN, WHICH IS THE VERSION YOU MUST ACCESS AND NOT THE HTML PAGE!!!
-LIKE SO: https://docs.convex.dev/quickstart/react.md`
+const DEFAULT_INTRO = `HOW TO CONSTRUCT URLs:
+- All pages are markdown: append .md to the path
+- CORE items: https://docs.convex.dev/<item>.md (e.g., realtime → https://docs.convex.dev/realtime.md)
+- Section items: https://docs.convex.dev/<section>/<item>.md
+  Example: DATABASE /database/ with item "schemas" → https://docs.convex.dev/database/schemas.md
+  Example: DATABASE /database/ with item "advanced/occ" → https://docs.convex.dev/database/advanced/occ.md
+  Example: CLIENTS /client/ with item "nextjs/app-router" → https://docs.convex.dev/client/nextjs/app-router.md
 
-const extractIntro = (content: string): string => {
-  // Extract text between frontmatter and <convex-docs-list>
-  const afterFrontmatter = content.replace(/^---[\s\S]*?---\n*/, "")
-  const match = afterFrontmatter.match(/^([\s\S]*?)<convex-docs-list>/m)
-  return match ? match[1].trim() : DEFAULT_INTRO
-}
+IMPORTANT: Items with slashes (like "advanced/occ") are FULL subpaths - do NOT drop any part of them!`
 
 const buildSkillContent = (items: {
   updatedAt: Date
@@ -293,7 +293,9 @@ const updateSkill = async (skillPath: string) => {
   }
   
   // CORE = single-segment paths that have NO children (true standalone pages)
-  const coreItems = [...singleSegmentPaths].filter((item) => !sectionsWithChildren.has(item))
+  // Filter out items that don't support .md format
+  const noMdSupport = new Set(["home", "quickstarts"])
+  const coreItems = [...singleSegmentPaths].filter((item) => !sectionsWithChildren.has(item) && !noMdSupport.has(item))
   const core = sortByOrder(coreItems, orders.itemOrder.__core__ ?? [])
   
   const groups: Record<string, string[]> = {}
@@ -302,8 +304,7 @@ const updateSkill = async (skillPath: string) => {
   }
 
   const updatedAt = sitemapUpdated ?? new Date()
-  const intro = extractIntro(existing)
-  const nextContent = buildSkillContent({ updatedAt, core, groups, orders, intro })
+  const nextContent = buildSkillContent({ updatedAt, core, groups, orders, intro: DEFAULT_INTRO })
 
   // Compare content excluding the timestamp to avoid unnecessary I/O
   const stripTimestamp = (content: string) => content.replace(/^\s*updated:\s*.+$/m, "")

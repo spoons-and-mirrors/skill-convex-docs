@@ -2,17 +2,24 @@
 name: convex-docs
 description: Get convex documentation LINKS so you can fetch them as markdown
 metadata:
-  updated: 2026-01-21 18:29:18 UTC
+  updated: 2026-01-21 18:53:50 UTC
 ---
 
-ALL PAGES ARE ACCESSIBLE AS MARKDOWN, WHICH IS THE VERSION YOU MUST ACCESS AND NOT THE HTML PAGE!!!
-LIKE SO: https://docs.convex.dev/quickstart/react.md
+HOW TO CONSTRUCT URLs:
+- All pages are markdown: append .md to the path
+- CORE items: https://docs.convex.dev/<item>.md (e.g., realtime → https://docs.convex.dev/realtime.md)
+- Section items: https://docs.convex.dev/<section>/<item>.md
+  Example: DATABASE /database/ with item "schemas" → https://docs.convex.dev/database/schemas.md
+  Example: DATABASE /database/ with item "advanced/occ" → https://docs.convex.dev/database/advanced/occ.md
+  Example: CLIENTS /client/ with item "nextjs/app-router" → https://docs.convex.dev/client/nextjs/app-router.md
+
+IMPORTANT: Items with slashes (like "advanced/occ") are FULL subpaths - do NOT drop any part of them!
 
 <convex-docs-list>
 
 CORE https://docs.convex.dev/
-home, quickstarts, realtime, chef, deployment-platform-api, error, eslint, http-api, self-hosting
-streaming-export-api, streaming-import-api
+realtime, chef, deployment-platform-api, error, eslint, http-api, self-hosting, streaming-export-api
+streaming-import-api
 
 QUICKSTART /quickstart/
 android, bun, nextjs, nodejs, nuxt, python, react, react-native, remix, rust, script-tag, svelte
