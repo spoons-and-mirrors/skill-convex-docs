@@ -313,7 +313,8 @@ const updateSkill = async (skillPath: string) => {
 
 export const ConvexSkillUpdater: Plugin = async () => {
   const pluginDir = dirname(fileURLToPath(import.meta.url))
-  const skillPath = join(pluginDir, "SKILL.md")
+  // When running from dist/, SKILL.md is in parent directory
+  const skillPath = join(pluginDir, "..", "SKILL.md")
 
   try {
     await updateSkill(skillPath)
