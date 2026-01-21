@@ -1,12 +1,23 @@
-# Convex Docs Skill
+# Convex Skills
 
-An opencode plugin that loads a `skill` for AI assistants to get up-to-date Convex documentation links. The skill provides a **token efficient** sitemap for all Convex documentation pages.
+An OpenCode plugin that provides two skills for AI assistants working with Convex.
 
-## What it does
+## Skills
 
-- Fetches the latest Convex docs sitemap on opencode startup
-- Update the SKILL.md file if the sitemap has changed
-- Registers a `convex-docs` skill for LLMs to use
+### `convex-docs`
+A **token-efficient** sitemap of all Convex documentation pages. The skill explains how to construct URLs so LLMs can fetch any doc page as markdown.
+
+- Auto-updates from the Convex sitemap on OpenCode startup
+- Only updates when the sitemap has actually changed
+
+### `convex-rules`
+Coding rules and patterns for generating correct Convex code. Covers:
+
+- Function definitions with validators
+- Database access patterns
+- Query and mutation rules
+- Actions, HTTP endpoints, crons
+- TypeScript best practices
 
 ## Installation
 

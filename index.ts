@@ -372,26 +372,37 @@ const updateSkill = async (skillPath: string) => {
 
 export const ConvexSkillUpdater: Plugin = async () => {
   const pluginDir = dirname(fileURLToPath(import.meta.url))
-  // When running from dist/, SKILL.md is in parent directory; from source, it's in same directory
+  // When running from dist/, md files are in parent directory; from source, in same directory
   const isInDist = pluginDir.endsWith("/dist") || pluginDir.endsWith("\\dist")
-  const skillPath = isInDist ? join(pluginDir, "..", "SKILL.md") : join(pluginDir, "SKILL.md")
+  const baseDir = isInDist ? join(pluginDir, "..") : pluginDir
+  const docsPath = join(baseDir, "convex-docs.md")
+  const rulesPath = join(baseDir, "convex-rules.md")
 
   try {
-    await updateSkill(skillPath)
+    await updateSkill(docsPath)
   } catch {
     // Silently fail - skill will use existing content
   }
 
-  // Read the skill content and register it
-  const skillContent = await readFile(skillPath, "utf8")
-  // Strip frontmatter to get just the content
-  const contentWithoutFrontmatter = skillContent.replace(/^---[\s\S]*?---\n*/, "")
+  // Read both skill files
+  const [docsContent, rulesContent] = await Promise.all([
+    readFile(docsPath, "utf8"),
+    readFile(rulesPath, "utf8"),
+  ])
+  
+  // Strip frontmatter/instruction tags to get just the content
+  const stripWrapper = (content: string) => 
+    content.replace(/^---[\s\S]*?---\n*/, "").replace(/<instructions[^>]*>\n?/, "").replace(/<\/instructions>\n?/, "")
 
   return {
     config: async (input) => {
       ;(input as any).skill["convex-docs"] = {
         description: "Get convex documentation LINKS so you can fetch them as markdown",
-        content: contentWithoutFrontmatter,
+        content: stripWrapper(docsContent),
+      }
+      ;(input as any).skill["convex-rules"] = {
+        description: "Convex coding rules and patterns for generating correct Convex code",
+        content: stripWrapper(rulesContent),
       }
     },
   }
