@@ -1,7 +1,7 @@
 import type { Plugin } from "@opencode-ai/plugin"
-import { readFile, writeFile } from "node:fs/promises"
-import { join, dirname } from "node:path"
-import { fileURLToPath } from "node:url"
+import { readFile, writeFile } from "fs/promises"
+import { join, dirname } from "path"
+import { fileURLToPath } from "url"
 
 const sitemapUrl = "https://docs.convex.dev/sitemap.xml"
 
@@ -320,8 +320,8 @@ export const ConvexSkillUpdater: Plugin = async () => {
   const contentWithoutFrontmatter = skillContent.replace(/^---[\s\S]*?---\n*/, "")
 
   return {
-    config: (input) => {
-      input.skill["convex-docs"] = {
+    config: async (input) => {
+      ;(input as any).skill["convex-docs"] = {
         description: "Get convex documentation LINKS so you can fetch them as markdown",
         content: contentWithoutFrontmatter,
       }
@@ -329,7 +329,7 @@ export const ConvexSkillUpdater: Plugin = async () => {
   }
 }
 
-// Auto-run when executed directly
-if (import.meta.main) {
+// Auto-run when executed directly (Bun-specific)
+if ((import.meta as any).main) {
   await ConvexSkillUpdater({} as any)
 }
