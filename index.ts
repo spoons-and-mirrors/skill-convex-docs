@@ -221,7 +221,16 @@ const updateSkill = async (skillPath: string) => {
   const existingUpdated = parseTimestamp(existing.match(/updated:\s*(.+)/)?.[1])
   const orders = parseExistingOrders(existing)
 
-  const response = await fetch(sitemapUrl)
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), 5000)
+  
+  let response: Response
+  try {
+    response = await fetch(sitemapUrl, { signal: controller.signal })
+  } finally {
+    clearTimeout(timeout)
+  }
+  
   if (!response.ok) {
     throw new Error(`Failed to fetch sitemap: ${response.status} ${response.statusText}`)
   }
