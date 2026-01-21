@@ -205,9 +205,10 @@ const buildSkillContent = (items: {
   const orderedGroups = sortByOrder(groupNames, orders.groupOrder.filter((item) => item !== "__core__"))
   for (const group of orderedGroups) {
     const label = orders.groupLabels[group] ?? group.toUpperCase().replace(/-/g, " ")
-    const compactItems = compactifyItems(groups[group])
+    // Don't compactify - LLMs need full paths to construct correct URLs
+    const sortedItems = sortByOrder(groups[group], orders.itemOrder[group] ?? [])
     lines.push(`${label} /${group}/`)
-    lines.push(wrapList(compactItems, 100))
+    lines.push(wrapList(sortedItems, 100))
     lines.push("")
   }
 
