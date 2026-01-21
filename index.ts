@@ -229,7 +229,6 @@ const updateSkill = async (skillPath: string) => {
   const sitemapUpdated = extractLastMod(xml) ?? parseTimestamp(response.headers.get("last-modified") ?? undefined)
 
   if (existingUpdated && sitemapUpdated && sitemapUpdated <= existingUpdated) {
-    console.log("convex skill already up to date")
     return
   }
 
@@ -303,7 +302,6 @@ const updateSkill = async (skillPath: string) => {
   const intro = extractIntro(existing)
   const nextContent = buildSkillContent({ updatedAt, core, groups, orders, intro })
   await writeFile(skillPath, nextContent, "utf8")
-  console.log(`convex skill updated at ${formatUtc(updatedAt)}`)
 }
 
 export const ConvexSkillUpdater: Plugin = async () => {
@@ -312,11 +310,8 @@ export const ConvexSkillUpdater: Plugin = async () => {
 
   try {
     await updateSkill(skillPath)
-  } catch (error) {
-    console.error(
-      "convex skill updater failed",
-      error instanceof Error ? error.message : String(error),
-    )
+  } catch {
+    // Silently fail - skill will use existing content
   }
 
   // Read the skill content and register it
