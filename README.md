@@ -13,15 +13,7 @@ An [OpenCode](https://opencode.ai) plugin that provides AI assistants with up-to
 Add to your OpenCode plugins directory:
 
 ```
-~/.config/opencode/plugin/convex-skill-updater/
-```
-
-## Usage
-
-Once installed, invoke the skill in OpenCode:
-
-```
-/skill convex-docs
+~/.config/opencode/plugin/convex-docs/
 ```
 
 The skill provides organized links to all Convex documentation pages. All pages can be fetched as markdown by appending `.md` to the URL:
@@ -29,14 +21,3 @@ The skill provides organized links to all Convex documentation pages. All pages 
 ```
 https://docs.convex.dev/quickstart/react.md
 ```
-
-## Development
-
-```bash
-# Run directly with Bun
-bun run index.ts
-```
-
-## License
-
-MIT
