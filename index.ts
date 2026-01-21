@@ -287,7 +287,8 @@ const updateSkill = async (skillPath: string) => {
   for (const { group, rest } of multiSegmentPaths) {
     sectionsWithChildren.add(group)
     if (!groupMap[group]) groupMap[group] = new Set()
-    groupMap[group].add(rest)
+    // Skip "index" items - section pages are accessed as /<section>.md, not /<section>/index.md
+    if (rest !== "index") groupMap[group].add(rest)
   }
   
   // CORE = single-segment paths that have NO children (true standalone pages)
@@ -314,8 +315,9 @@ const updateSkill = async (skillPath: string) => {
 
 export const ConvexSkillUpdater: Plugin = async () => {
   const pluginDir = dirname(fileURLToPath(import.meta.url))
-  // When running from dist/, SKILL.md is in parent directory
-  const skillPath = join(pluginDir, "..", "SKILL.md")
+  // When running from dist/, SKILL.md is in parent directory; from source, it's in same directory
+  const isInDist = pluginDir.endsWith("/dist") || pluginDir.endsWith("\\dist")
+  const skillPath = isInDist ? join(pluginDir, "..", "SKILL.md") : join(pluginDir, "SKILL.md")
 
   try {
     await updateSkill(skillPath)

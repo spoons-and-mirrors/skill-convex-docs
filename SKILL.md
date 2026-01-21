@@ -2,7 +2,7 @@
 name: convex-docs
 description: Get convex documentation LINKS so you can fetch them as markdown
 metadata:
-  updated: 2026-01-21 17:33:53 UTC
+  updated: 2026-01-21 18:19:35 UTC
 ---
 
 ALL PAGES ARE ACCESSIBLE AS MARKDOWN, WHICH IS THE VERSION YOU MUST ACCESS AND NOT THE HTML PAGE!!!
@@ -19,77 +19,77 @@ android, bun, nextjs, nodejs, nuxt, python, react, react-native, remix, rust, sc
 swift, tanstack-start, vue
 
 TUTORIAL /tutorial/
-index, actions, scale
+actions, scale
 
 UNDERSTANDING /understanding/
-index, workflow, zen, best-practices/index, other-recommendations, typescript
+best-practices, workflow, zen, best-practices/other-recommendations, typescript
 
 FUNCTIONS /functions/
-index, actions, bundling, debugging, http-actions, internal-functions, mutation-functions
-query-functions, runtimes, validation, error-handling/index, application-errors
+actions, bundling, debugging, error-handling, http-actions, internal-functions, mutation-functions
+query-functions, runtimes, validation, error-handling/application-errors
 
 DATABASE /database/
-index, backup-restore, document-ids, pagination, schemas, types, writing-data, advanced/occ
-schema-philosophy, system-tables, import-export/index, export, import, reading-data/index, filters
-indexes/index, indexes-and-query-perf
+backup-restore, document-ids, import-export, pagination, reading-data, schemas, types, writing-data
+advanced/occ, schema-philosophy, system-tables, import-export/export, import, reading-data/filters
+indexes, indexes/indexes-and-query-perf
 
 AUTH /auth/
-index, auth0, clerk, convex-auth, database-auth, debug, functions-auth, advanced/custom-auth
-custom-jwt, authkit/index, auto-provision, troubleshooting
+auth0, authkit, clerk, convex-auth, database-auth, debug, functions-auth, advanced/custom-auth
+custom-jwt, authkit/auto-provision, troubleshooting
 
 FILE STORAGE /file-storage/
-index, delete-files, file-metadata, serve-files, store-files, upload-files
+delete-files, file-metadata, serve-files, store-files, upload-files
 
 SCHEDULING /scheduling/
-index, cron-jobs, scheduled-functions
+cron-jobs, scheduled-functions
 
 SEARCH /search/
-index, text-search, vector-search
+text-search, vector-search
 
 CLIENTS /client/
 android, javascript, open-api, python, react, react-native, rust, svelte, swift, vue
-android/data-types, javascript/bun, node, script-tag, nextjs/app-router/index, server-rendering
-pages-router/index, quickstart, react/deployment-urls, optimistic-updates, swift/data-types
-tanstack/tanstack-query/index, tanstack-start/index, clerk, vue/nuxt
+android/data-types, javascript/bun, node, script-tag, nextjs/app-router, pages-router
+app-router/server-rendering, pages-router/quickstart, react/deployment-urls, optimistic-updates
+swift/data-types, tanstack/tanstack-query, tanstack-start, tanstack-start/clerk, vue/nuxt
 
 AGENTS /agents/
-index, agent-usage, context, debugging, files, getting-started, human-agents, messages, playground
-rag, rate-limiting, streaming, threads, tools, usage-tracking, workflows
+agent-usage, context, debugging, files, getting-started, human-agents, messages, playground, rag
+rate-limiting, streaming, threads, tools, usage-tracking, workflows
 
 AI /ai/
-index, convex-mcp-server, using-cursor, using-github-copilot, using-windsurf
+convex-mcp-server, using-cursor, using-github-copilot, using-windsurf
 
 COMPONENTS /components/
-index, authoring, understanding, using
+authoring, understanding, using
 
 TESTING /testing/
-index, ci, convex-backend, convex-test
+ci, convex-backend, convex-test
 
 PRODUCTION /production/
-index, contact, environment-variables, multiple-repos, pause-deployment, project-configuration
-hosting/index, custom, netlify, preview-deployments, vercel, integrations/index, exception-reporting
-streaming-import-export, log-streams/index, legacy-event-schema, state/index, limits
+contact, environment-variables, hosting, integrations, multiple-repos, pause-deployment
+project-configuration, state, hosting/custom, netlify, preview-deployments, vercel
+integrations/exception-reporting, log-streams, streaming-import-export
+log-streams/legacy-event-schema, state/limits
 
 CLI /cli/
-index, agent-mode, deploy-key-types, local-deployments
+agent-mode, deploy-key-types, local-deployments
 
 DASHBOARD /dashboard/
-index, projects, teams, deployments/index, data, deployment-settings, file-storage, functions
-health, history, logs, schedules
+deployments, projects, teams, deployments/data, deployment-settings, file-storage, functions, health
+history, logs, schedules
 
 GENERATED API /generated-api/
-index, api, data-model, server
+api, data-model, server
 
 MANAGEMENT API /management-api/
-index, convex-management-api, create-custom-domain, create-deploy-key, create-project
-delete-custom-domain, delete-deployment, delete-project, get-token-details, list-custom-domains
-list-deployments, list-projects
+convex-management-api, create-custom-domain, create-deploy-key, create-project, delete-custom-domain
+delete-deployment, delete-project, get-token-details, list-custom-domains, list-deployments
+list-projects
 
 DEPLOYMENT API /deployment-api/
-index, convex-deployment-api, create-log-stream, delete-log-stream, get-canonical-urls
-get-log-stream, list-environment-variables, list-log-streams, pause-deployment
-rotate-webhook-secret, unpause-deployment, update-canonical-url, update-environment-variables
-update-log-stream
+convex-deployment-api, create-log-stream, delete-log-stream, get-canonical-urls, get-log-stream
+list-environment-variables, list-log-streams, pause-deployment, rotate-webhook-secret
+unpause-deployment, update-canonical-url, update-environment-variables, update-log-stream
 
 PUBLIC API /public-deployment-api/
 convex-public-http-routes, public-action-post, public-function-post, public-function-post-with-path
@@ -97,7 +97,7 @@ public-get-query-ts, public-mutation-post, public-query-at-ts-post, public-query
 public-query-get, public-query-post
 
 API REF /api/
-index, modules, classes/browser.BaseConvexClient, browser.ConvexClient, browser.ConvexHttpClient
+modules, classes/browser.BaseConvexClient, browser.ConvexClient, browser.ConvexHttpClient
 react.ConvexReactClient, server.Crons, server.Expression, server.FilterExpression, server.HttpRouter
 server.IndexRange, server.SchemaDefinition, server.SearchFilter, server.TableDefinition
 values.ConvexError, values.VAny, values.VArray, values.VBoolean, values.VBytes, values.VFloat64
@@ -118,6 +118,6 @@ server.VectorSearchQuery, modules/browser, nextjs, react, react_auth0, react_cle
 namespaces/values.Base64
 
 PLATFORM APIS /platform-apis/
-index, embedded-dashboard, oauth-applications
+embedded-dashboard, oauth-applications
 
 </convex-docs-list>
