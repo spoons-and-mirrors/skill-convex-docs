@@ -17,6 +17,7 @@ interface UrlResult {
   htmlStatus?: number | "error"
   working: boolean
   workingUrl?: string
+  mdWorks: boolean
 }
 
 const fetchStatus = async (url: string): Promise<number | "error"> => {
@@ -43,7 +44,7 @@ const parseSkillMd = (content: string): string[] => {
 
   for (const line of lines) {
     const trimmed = line.trim()
-    if (!trimmed || trimmed.startsWith("---") || trimmed.startsWith("<") || trimmed.startsWith("ALL PAGES")) {
+    if (!trimmed || trimmed.startsWith("---") || trimmed.startsWith("<") || trimmed.startsWith("HOW TO") || trimmed.startsWith("-") || trimmed.startsWith("Example") || trimmed.startsWith("IMPORTANT")) {
       continue
     }
 
@@ -83,16 +84,16 @@ const testUrl = async (baseUrl: string): Promise<UrlResult> => {
   const mdStatus = await fetchStatus(mdUrl)
   
   if (mdStatus === 200) {
-    return { url: baseUrl, mdStatus, working: true, workingUrl: mdUrl }
+    return { url: baseUrl, mdStatus, working: true, workingUrl: mdUrl, mdWorks: true }
   }
 
   // Try without .md
   const htmlStatus = await fetchStatus(baseUrl)
   if (htmlStatus === 200) {
-    return { url: baseUrl, mdStatus, htmlStatus, working: true, workingUrl: baseUrl }
+    return { url: baseUrl, mdStatus, htmlStatus, working: true, workingUrl: baseUrl, mdWorks: false }
   }
 
-  return { url: baseUrl, mdStatus, htmlStatus, working: false }
+  return { url: baseUrl, mdStatus, htmlStatus, working: false, mdWorks: false }
 }
 
 const main = async () => {
@@ -108,7 +109,7 @@ const main = async () => {
 
   const results: UrlResult[] = []
   const broken: UrlResult[] = []
-  const mdFailed: UrlResult[] = []
+  const noMdSupport: UrlResult[] = []
 
   // Test in batches of 10 for parallel execution
   const batchSize = 10
@@ -121,9 +122,9 @@ const main = async () => {
       if (!result.working) {
         broken.push(result)
         console.log(`BROKEN: ${result.url} (md: ${result.mdStatus}, html: ${result.htmlStatus})`)
-      } else if (result.workingUrl && !result.workingUrl.endsWith(".md")) {
-        mdFailed.push(result)
-        console.log(`NO .MD: ${result.url} (works at ${result.workingUrl})`)
+      } else if (!result.mdWorks) {
+        noMdSupport.push(result)
+        console.log(`NO .MD: ${result.url}`)
       } else {
         process.stdout.write(".")
       }
@@ -132,21 +133,22 @@ const main = async () => {
 
   console.log("\n\n=== SUMMARY ===")
   console.log(`Total URLs: ${urls.length}`)
-  console.log(`Working: ${results.filter(r => r.working).length}`)
-  console.log(`Broken: ${broken.length}`)
-  console.log(`No .md (html only): ${mdFailed.length}`)
+  console.log(`Working with .md: ${results.filter(r => r.mdWorks).length}`)
+  console.log(`Working without .md only: ${noMdSupport.length}`)
+  console.log(`Completely broken: ${broken.length}`)
 
-  if (broken.length > 0) {
-    console.log("\n=== BROKEN URLs ===")
-    for (const r of broken) {
-      console.log(`  ${r.url}`)
+  if (noMdSupport.length > 0) {
+    console.log("\n=== URLs that do NOT accept .md (html only) ===")
+    for (const r of noMdSupport) {
+      console.log(`  ${r.url.replace(BASE_URL + "/", "")}`)
     }
+    console.log("\nThese should be excluded from SKILL.md or noted in the intro.")
   }
 
-  if (mdFailed.length > 0) {
-    console.log("\n=== URLs without .md support ===")
-    for (const r of mdFailed) {
-      console.log(`  ${r.url} -> ${r.workingUrl}`)
+  if (broken.length > 0) {
+    console.log("\n=== BROKEN URLs (neither .md nor html works) ===")
+    for (const r of broken) {
+      console.log(`  ${r.url.replace(BASE_URL + "/", "")} (md: ${r.mdStatus}, html: ${r.htmlStatus})`)
     }
   }
 
