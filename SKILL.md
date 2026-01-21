@@ -2,18 +2,26 @@
 name: convex-docs
 description: Get convex documentation LINKS so you can fetch them as markdown
 metadata:
-  updated: 2026-01-21 18:53:50 UTC
+  updated: 2026-01-21 19:27:01 UTC
 ---
 
 HOW TO CONSTRUCT URLs:
-- All pages are markdown: append .md to the path
-- CORE items: https://docs.convex.dev/<item>.md (e.g., realtime → https://docs.convex.dev/realtime.md)
-- Section items: https://docs.convex.dev/<section>/<item>.md
-  Example: DATABASE /database/ with item "schemas" → https://docs.convex.dev/database/schemas.md
-  Example: DATABASE /database/ with item "advanced/occ" → https://docs.convex.dev/database/advanced/occ.md
-  Example: CLIENTS /client/ with item "nextjs/app-router" → https://docs.convex.dev/client/nextjs/app-router.md
+All pages are markdown - append .md to construct the full URL.
 
-IMPORTANT: Items with slashes (like "advanced/occ") are FULL subpaths - do NOT drop any part of them!
+FORMAT 1 - CORE items (no section prefix):
+  https://docs.convex.dev/<item>.md
+  Example: "realtime" → https://docs.convex.dev/realtime.md
+
+FORMAT 2 - Section with slash /section/:
+  https://docs.convex.dev/<section>/<item>.md
+  Example: DATABASE /database/ + "schemas" → https://docs.convex.dev/database/schemas.md
+  Example: DATABASE /database/ + "advanced/occ" → https://docs.convex.dev/database/advanced/occ.md
+  Items with slashes are FULL subpaths - do NOT drop any part!
+
+FORMAT 3 - Section with dot prefix /section/prefix.:
+  https://docs.convex.dev/<section>/<prefix>.<item>.md
+  Example: API CLASSES VALUES /api/classes/values. + "VString" → https://docs.convex.dev/api/classes/values.VString.md
+  Example: API INTERFACES SERVER /api/interfaces/server. + "Auth" → https://docs.convex.dev/api/interfaces/server.Auth.md
 
 <convex-docs-list>
 
@@ -107,34 +115,40 @@ public-get-query-ts, public-mutation-post, public-query-at-ts-post, public-query
 public-query-get, public-query-post
 
 API REF /api/
-modules, classes/browser.BaseConvexClient, interfaces/browser.BaseConvexClientOptions
-modules/browser, namespaces/values.Base64, classes/browser.ConvexClient
-classes/browser.ConvexHttpClient, classes/react.ConvexReactClient, classes/server.Crons
-classes/server.Expression, classes/server.FilterExpression, classes/server.HttpRouter
-classes/server.IndexRange, classes/server.SchemaDefinition, classes/server.SearchFilter
-classes/server.TableDefinition, classes/values.ConvexError, classes/values.VAny
-classes/values.VArray, classes/values.VBoolean, classes/values.VBytes, classes/values.VFloat64
-classes/values.VId, classes/values.VInt64, classes/values.VLiteral, classes/values.VNull
-classes/values.VObject, classes/values.VRecord, classes/values.VString, classes/values.VUnion
-interfaces/browser.MutationOptions, interfaces/browser.OptimisticLocalStore
-interfaces/browser.SubscribeOptions, interfaces/react.ConvexReactClientOptions
-interfaces/react.MutationOptions, interfaces/react.ReactAction, interfaces/react.ReactMutation
-interfaces/react.Watch, interfaces/react.WatchQueryOptions, interfaces/server.Auth
-interfaces/server.BaseTableReader, interfaces/server.BaseTableWriter, interfaces/server.CronJob
-interfaces/server.DefineSchemaOptions, interfaces/server.FilterBuilder
-interfaces/server.GenericActionCtx, interfaces/server.GenericDatabaseReader
-interfaces/server.GenericDatabaseReaderWithTable, interfaces/server.GenericDatabaseWriter
-interfaces/server.GenericDatabaseWriterWithTable, interfaces/server.GenericMutationCtx
-interfaces/server.GenericQueryCtx, interfaces/server.IndexRangeBuilder
-interfaces/server.OrderedQuery, interfaces/server.PaginationOptions
-interfaces/server.PaginationResult, interfaces/server.Query, interfaces/server.QueryInitializer
-interfaces/server.Scheduler, interfaces/server.SearchFilterBuilder
-interfaces/server.SearchFilterFinalizer, interfaces/server.SearchIndexConfig
-interfaces/server.StorageActionWriter, interfaces/server.StorageReader
-interfaces/server.StorageWriter, interfaces/server.SystemDataModel, interfaces/server.UserIdentity
-interfaces/server.ValidatedFunction, interfaces/server.VectorFilterBuilder
-interfaces/server.VectorIndexConfig, interfaces/server.VectorSearchQuery, modules/nextjs
-modules/react, modules/react_auth0, modules/react_clerk, modules/server, modules/values
+modules, modules/browser, modules/nextjs, modules/react, modules/react_auth0, modules/react_clerk
+modules/server, modules/values
+
+API CLASSES BROWSER /api/classes/browser.
+BaseConvexClient, ConvexClient, ConvexHttpClient
+
+API CLASSES REACT /api/classes/react.
+ConvexReactClient
+
+API CLASSES SERVER /api/classes/server.
+Crons, Expression, FilterExpression, HttpRouter, IndexRange, SchemaDefinition, SearchFilter
+TableDefinition
+
+API CLASSES VALUES /api/classes/values.
+ConvexError, VAny, VArray, VBoolean, VBytes, VFloat64, VId, VInt64, VLiteral, VNull, VObject
+VRecord, VString, VUnion
+
+API INTERFACES BROWSER /api/interfaces/browser.
+BaseConvexClientOptions, MutationOptions, OptimisticLocalStore, SubscribeOptions
+
+API INTERFACES REACT /api/interfaces/react.
+ConvexReactClientOptions, MutationOptions, ReactAction, ReactMutation, Watch, WatchQueryOptions
+
+API INTERFACES SERVER /api/interfaces/server.
+Auth, BaseTableReader, BaseTableWriter, CronJob, DefineSchemaOptions, FilterBuilder
+GenericActionCtx, GenericDatabaseReader, GenericDatabaseReaderWithTable, GenericDatabaseWriter
+GenericDatabaseWriterWithTable, GenericMutationCtx, GenericQueryCtx, IndexRangeBuilder, OrderedQuery
+PaginationOptions, PaginationResult, Query, QueryInitializer, Scheduler, SearchFilterBuilder
+SearchFilterFinalizer, SearchIndexConfig, StorageActionWriter, StorageReader, StorageWriter
+SystemDataModel, UserIdentity, ValidatedFunction, VectorFilterBuilder, VectorIndexConfig
+VectorSearchQuery
+
+API NAMESPACES VALUES /api/namespaces/values.
+Base64
 
 PLATFORM APIS /platform-apis/
 embedded-dashboard, oauth-applications

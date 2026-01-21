@@ -168,14 +168,43 @@ const compactifyItems = (items: string[], depth = 0): string[] => {
 }
 
 const DEFAULT_INTRO = `HOW TO CONSTRUCT URLs:
-- All pages are markdown: append .md to the path
-- CORE items: https://docs.convex.dev/<item>.md (e.g., realtime → https://docs.convex.dev/realtime.md)
-- Section items: https://docs.convex.dev/<section>/<item>.md
-  Example: DATABASE /database/ with item "schemas" → https://docs.convex.dev/database/schemas.md
-  Example: DATABASE /database/ with item "advanced/occ" → https://docs.convex.dev/database/advanced/occ.md
-  Example: CLIENTS /client/ with item "nextjs/app-router" → https://docs.convex.dev/client/nextjs/app-router.md
+All pages are markdown - append .md to construct the full URL.
 
-IMPORTANT: Items with slashes (like "advanced/occ") are FULL subpaths - do NOT drop any part of them!`
+FORMAT 1 - CORE items (no section prefix):
+  https://docs.convex.dev/<item>.md
+  Example: "realtime" → https://docs.convex.dev/realtime.md
+
+FORMAT 2 - Section with slash /section/:
+  https://docs.convex.dev/<section>/<item>.md
+  Example: DATABASE /database/ + "schemas" → https://docs.convex.dev/database/schemas.md
+  Example: DATABASE /database/ + "advanced/occ" → https://docs.convex.dev/database/advanced/occ.md
+  Items with slashes are FULL subpaths - do NOT drop any part!
+
+FORMAT 3 - Section with dot prefix /section/prefix.:
+  https://docs.convex.dev/<section>/<prefix>.<item>.md
+  Example: API CLASSES VALUES /api/classes/values. + "VString" → https://docs.convex.dev/api/classes/values.VString.md
+  Example: API INTERFACES SERVER /api/interfaces/server. + "Auth" → https://docs.convex.dev/api/interfaces/server.Auth.md`
+
+// Group API items by their prefix pattern (e.g., "classes/browser.", "interfaces/server.")
+const groupApiItems = (items: string[]): { subGroups: Record<string, string[]>; standalone: string[] } => {
+  const subGroups: Record<string, string[]> = {}
+  const standalone: string[] = []
+
+  for (const item of items) {
+    // Match patterns like "classes/browser.ConvexClient" or "interfaces/server.Auth"
+    const match = item.match(/^(classes|interfaces|namespaces)\/([^.]+)\.(.+)$/)
+    if (match) {
+      const prefix = `${match[1]}/${match[2]}.`
+      const name = match[3]
+      if (!subGroups[prefix]) subGroups[prefix] = []
+      subGroups[prefix].push(name)
+    } else {
+      standalone.push(item)
+    }
+  }
+
+  return { subGroups, standalone }
+}
 
 const buildSkillContent = (items: {
   updatedAt: Date
@@ -205,11 +234,37 @@ const buildSkillContent = (items: {
   const orderedGroups = sortByOrder(groupNames, orders.groupOrder.filter((item) => item !== "__core__"))
   for (const group of orderedGroups) {
     const label = orders.groupLabels[group] ?? group.toUpperCase().replace(/-/g, " ")
-    // Don't compactify - LLMs need full paths to construct correct URLs
     const sortedItems = sortByOrder(groups[group], orders.itemOrder[group] ?? [])
-    lines.push(`${label} /${group}/`)
-    lines.push(wrapList(sortedItems, 100))
-    lines.push("")
+    
+    // Special handling for API section - group by prefix patterns
+    if (group === "api") {
+      const { subGroups, standalone } = groupApiItems(sortedItems)
+      
+      // First output standalone items under main API section
+      if (standalone.length > 0) {
+        lines.push(`${label} /${group}/`)
+        lines.push(wrapList(standalone, 100))
+        lines.push("")
+      }
+      
+      // Then output each sub-group with its prefix
+      const prefixOrder = ["classes/browser.", "classes/react.", "classes/server.", "classes/values.", 
+                          "interfaces/browser.", "interfaces/react.", "interfaces/server.", "namespaces/values."]
+      const orderedPrefixes = sortByOrder(Object.keys(subGroups), prefixOrder)
+      
+      for (const prefix of orderedPrefixes) {
+        const subLabel = `API ${prefix.replace(/\//g, " ").replace(/\./g, "").toUpperCase()}`
+        const subItems = subGroups[prefix].sort()
+        lines.push(`${subLabel} /${group}/${prefix}`)
+        lines.push(wrapList(subItems, 100))
+        lines.push("")
+      }
+    } else {
+      // Regular section handling
+      lines.push(`${label} /${group}/`)
+      lines.push(wrapList(sortedItems, 100))
+      lines.push("")
+    }
   }
 
   lines.push("</convex-docs-list>")

@@ -39,26 +39,38 @@ const fetchStatus = async (url: string): Promise<number | "error"> => {
 const parseSkillMd = (content: string): string[] => {
   const urls: string[] = []
   const lines = content.split(/\r?\n/)
-  let currentGroup: string | null = null
+  let currentPath: string | null = null
+  let pathEndsDot = false
   let isCore = false
 
   for (const line of lines) {
     const trimmed = line.trim()
-    if (!trimmed || trimmed.startsWith("---") || trimmed.startsWith("<") || trimmed.startsWith("HOW TO") || trimmed.startsWith("-") || trimmed.startsWith("Example") || trimmed.startsWith("IMPORTANT")) {
+    if (!trimmed || trimmed.startsWith("---") || trimmed.startsWith("<") || trimmed.startsWith("HOW TO") || trimmed.startsWith("-") || trimmed.startsWith("Example") || trimmed.startsWith("IMPORTANT") || trimmed.startsWith("FORMAT") || trimmed.startsWith("Items") || trimmed.startsWith("All pages")) {
       continue
     }
 
     // Check for CORE section
     if (trimmed.startsWith("CORE ")) {
       isCore = true
-      currentGroup = null
+      currentPath = null
       continue
     }
 
-    // Check for group header like "DATABASE /database/"
-    const groupMatch = trimmed.match(/^[A-Z0-9 ]+ \/([^/]+)\/$/)
-    if (groupMatch) {
-      currentGroup = groupMatch[1]
+    // Check for section header - can end with / or .
+    // Examples: "DATABASE /database/" or "API CLASSES SERVER /api/classes/server."
+    const slashMatch = trimmed.match(/^[A-Z0-9 ]+ (\/[^\/]+\/)$/)
+    const dotMatch = trimmed.match(/^[A-Z0-9 ]+ (\/[^\s]+\.)$/)
+    
+    if (slashMatch) {
+      currentPath = slashMatch[1]
+      pathEndsDot = false
+      isCore = false
+      continue
+    }
+    
+    if (dotMatch) {
+      currentPath = dotMatch[1]
+      pathEndsDot = true
       isCore = false
       continue
     }
@@ -67,11 +79,16 @@ const parseSkillMd = (content: string): string[] => {
     const items = trimmed.split(",").map(s => s.trim()).filter(Boolean)
     for (const item of items) {
       if (isCore) {
-        // Core items: https://docs.convex.dev/<item>.md
+        // Core items: https://docs.convex.dev/<item>
         urls.push(`${BASE_URL}/${item}`)
-      } else if (currentGroup) {
-        // Group items: https://docs.convex.dev/<group>/<item>.md
-        urls.push(`${BASE_URL}/${currentGroup}/${item}`)
+      } else if (currentPath) {
+        if (pathEndsDot) {
+          // Dot-prefix path: https://docs.convex.dev/api/classes/server.Auth
+          urls.push(`${BASE_URL}${currentPath}${item}`)
+        } else {
+          // Slash path: https://docs.convex.dev/database/schemas
+          urls.push(`${BASE_URL}${currentPath}${item}`)
+        }
       }
     }
   }
