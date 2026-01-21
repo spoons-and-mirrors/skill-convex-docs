@@ -11,7 +11,7 @@ A **token-efficient** sitemap of all Convex documentation pages. The skill expla
 - Only updates when the sitemap has actually changed
 
 ### `convex-rules`
-Coding rules and patterns for generating correct Convex code. Covers:
+Minimal coding rules and patterns for generating correct Convex code. Covers:
 
 - Function definitions with validators
 - Database access patterns
