@@ -290,13 +290,6 @@ const updateSkill = async (skillPath: string) => {
     groupMap[group].add(rest)
   }
   
-  // Add "index" for sections that have a single-segment page (e.g., /agents as index for /agents/*)
-  for (const section of sectionsWithChildren) {
-    if (singleSegmentPaths.has(section) || trailingSlashSections.has(section)) {
-      groupMap[section].add("index")
-    }
-  }
-  
   // CORE = single-segment paths that have NO children (true standalone pages)
   const coreItems = [...singleSegmentPaths].filter((item) => !sectionsWithChildren.has(item))
   const core = sortByOrder(coreItems, orders.itemOrder.__core__ ?? [])
