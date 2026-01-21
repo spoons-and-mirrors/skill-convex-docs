@@ -301,6 +301,13 @@ const updateSkill = async (skillPath: string) => {
   const updatedAt = sitemapUpdated ?? new Date()
   const intro = extractIntro(existing)
   const nextContent = buildSkillContent({ updatedAt, core, groups, orders, intro })
+
+  // Compare content excluding the timestamp to avoid unnecessary I/O
+  const stripTimestamp = (content: string) => content.replace(/^\s*updated:\s*.+$/m, "")
+  if (stripTimestamp(nextContent) === stripTimestamp(existing)) {
+    return
+  }
+
   await writeFile(skillPath, nextContent, "utf8")
 }
 
