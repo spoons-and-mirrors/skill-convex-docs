@@ -277,7 +277,6 @@ const updateSkill = async (skillPath: string) => {
     const group = segments[0]
     let rest = segments.slice(1).join("/")
     if (!rest) rest = "index"
-    if (hasTrailingSlash && !rest.endsWith("/index")) rest = `${rest}/index`
     multiSegmentPaths.push({ group, rest, hasTrailingSlash })
   }
   
