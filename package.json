@@ -1,0 +1,39 @@
+{
+  "name": "@spoons-and-mirrors/skill-convex-docs",
+  "version": "0.1.0",
+  "description": "OpenCode plugin that provides Convex documentation as a skill",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "SKILL.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "opencode",
+    "plugin",
+    "convex",
+    "documentation",
+    "skill"
+  ],
+  "author": "",
+  "license": "MIT",
+  "peerDependencies": {
+    "@opencode-ai/plugin": "*"
+  },
+  "devDependencies": {
+    "@opencode-ai/plugin": "latest",
+    "@types/node": "^22.15.2",
+    "typescript": "^5.8.3"
+  }
+}
