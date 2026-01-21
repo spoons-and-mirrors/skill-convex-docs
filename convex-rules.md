@@ -1,4 +1,7 @@
-<instructions name="convex rules" >
+---
+name: convex-rules
+description: Convex coding rules and patterns for generating correct Convex code. YOU MUST USE THIS SKILL WHENEVER YOU DEAL WITH CONVEX CODE.
+---
 
 This file is for LLMs generating Convex code.
 To dive deeper into any topic, USE THE CONVEX-DOCS SKILL to get official documentation links.
@@ -147,5 +150,3 @@ await ctx.db.patch('users', userId, { name: 'Ada' });
 3. NEVER use `ctx.db` inside actions.
 4. ALWAYS use `api.*` or `internal.*` references, NEVER raw functions.
 5. ALWAYS use indexes for scalable queries; avoid `.filter()`.
-
-</instructions>

@@ -390,19 +390,29 @@ export const ConvexSkillUpdater: Plugin = async () => {
     readFile(rulesPath, "utf8"),
   ])
   
-  // Strip frontmatter/instruction tags to get just the content
-  const stripWrapper = (content: string) => 
-    content.replace(/^---[\s\S]*?---\n*/, "").replace(/<instructions[^>]*>\n?/, "").replace(/<\/instructions>\n?/, "")
+  // Parse frontmatter and strip it from content
+  const parseFrontmatter = (content: string) => {
+    const match = content.match(/^---\n([\s\S]*?)\n---\n*([\s\S]*)$/)
+    if (!match) return { name: "", description: "", body: content }
+    const frontmatter = match[1]
+    const body = match[2]
+    const name = frontmatter.match(/^name:\s*(.+)$/m)?.[1]?.trim() ?? ""
+    const description = frontmatter.match(/^description:\s*(.+)$/m)?.[1]?.trim() ?? ""
+    return { name, description, body }
+  }
+
+  const docs = parseFrontmatter(docsContent)
+  const rules = parseFrontmatter(rulesContent)
 
   return {
     config: async (input) => {
-      ;(input as any).skill["convex-docs"] = {
-        description: "Get convex documentation LINKS so you can fetch them as markdown",
-        content: stripWrapper(docsContent),
+      ;(input as any).skill[docs.name || "convex-docs"] = {
+        description: docs.description,
+        content: docs.body,
       }
-      ;(input as any).skill["convex-rules"] = {
-        description: "Convex coding rules and patterns for generating correct Convex code",
-        content: stripWrapper(rulesContent),
+      ;(input as any).skill[rules.name || "convex-rules"] = {
+        description: rules.description,
+        content: rules.body,
       }
     },
   }
