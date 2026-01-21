@@ -1,23 +1,17 @@
 # Convex Docs Skill
 
-An [OpenCode](https://opencode.ai) plugin that provides AI assistants with up-to-date Convex documentation links.
+An opencode plugin that loads a `skill` for AI assistants to get up-to-date Convex documentation links. The skill provides a **token efficient** sitemap for all Convex documentation pages.
 
 ## What it does
 
-- Fetches the latest Convex docs sitemap on startup
-- Parses and organizes documentation URLs by category
-- Registers a `convex-docs` skill that helps AI access documentation as markdown
+- Fetches the latest Convex docs sitemap on opencode startup
+- Update the SKILL.md file if the sitemap has changed
+- Registers a `convex-docs` skill for LLMs to use
 
 ## Installation
 
-Add to your OpenCode plugins directory:
+Add to your OpenCode config plugin array:
 
 ```
-~/.config/opencode/plugin/convex-docs/
-```
-
-The skill provides organized links to all Convex documentation pages. All pages can be fetched as markdown by appending `.md` to the URL:
-
-```
-https://docs.convex.dev/quickstart/react.md
+"@spoons-and-mirrors/skill-convex-docs@latest"
 ```
